@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Amairani</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Fondo: noche estrellada animada -->
+    <div class="nebula"></div>
+    <canvas id="starfield" class="stars"></canvas>
+    
+    <!-- Contenedor del Scroll -->
+    <div class="scroll-container">
+        
+        <!-- Sección 1: Contador -->
+        <section class="section" id="counter-section">
+            <div class="container">
+                <h1 class="title">NUESTRO TIEMPO JUNTOS</h1>
+                
+                <div class="counter">
+                    <div class="time-box"><span id="años">0</span><p>AÑOS</p></div>
+                    <div class="time-box"><span id="meses">0</span><p>MESES</p></div>
+                    <div class="time-box"><span id="dias">0</span><p>DÍAS</p></div>
+                    <div class="time-box"><span id="horas">0</span><p>HORAS</p></div>
+                    <div class="time-box"><span id="minutos">0</span><p>MIN</p></div>
+                    <div class="time-box"><span id="segundos">0</span><p>SEG</p></div>
+                </div>
+
+                
+                <div class="scroll-indicator">
+                    <span>Desliza hacia abajo</span>
+                    <div class="arrow-down"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2: Corazón Multilingüe -->
+        <section class="section heart-section" id="heart-section">
+            <div class="heart-container">
+                 <h2 class="heart-title">En todos los idiomas...</h2>
+                 <!-- El corazón se generará con JavaScript -->
+                 <div id="heart-canvas"></div>
+            </div>
+            <!-- Nuevo indicador de scroll para pasar al árbol -->
+            <div class="scroll-indicator tree-indicator">
+                <span>Nuestra historia florece</span>
+                <div class="arrow-down" style="border-color: #ff6b81;"></div>
+            </div>
+        </section>
+
+        <!-- Sección 3: El Árbol de Recuerdos -->
+        <section class="section tree-section" id="tree-section">
+            <div class="tree-container">
+                <h2 class="tree-title">¿Quieres plantar un árbol de recuerdos conmigo?</h2>
+                
+                <div class="tree-wrapper">
+                    <!-- SVG para dibujar el tronco, ramas y volumen de copa dinámicamente -->
+                    <svg id="tree-svg" viewBox="0 0 400 500" preserveAspectRatio="xMidYMax meet">
+                        <defs>
+                            <linearGradient id="barkGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#3e2313" />
+                                <stop offset="35%" stop-color="#5c381e" />
+                                <stop offset="65%" stop-color="#734727" />
+                                <stop offset="100%" stop-color="#3e2313" />
+                            </linearGradient>
+                            <radialGradient id="blossomCloud" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#ffb7c5" stop-opacity="0.65" />
+                                <stop offset="60%" stop-color="#ff8da1" stop-opacity="0.35" />
+                                <stop offset="100%" stop-color="#ff8da1" stop-opacity="0" />
+                            </radialGradient>
+                        </defs>
+                        <!-- Capa de nubes de flores (fondo de la copa) -->
+                        <g id="tree-clouds"></g>
+                        <!-- Capa de ramas y tronco -->
+                        <g id="tree-branches"></g>
+                    </svg>
+                    
+                    <!-- Contenedor para las hojas/pétalos frontales -->
+                    <div id="leaves-container"></div>
+                    <!-- Pétalos que caen suavemente -->
+                    <div id="falling-petals-container"></div>
+                </div>
+
+                <!-- Contenedor para la carta y GIF de Milk and Mocha -->
+                <div class="memory-content" id="memory-content">
+                    <div class="gif-placeholder" id="memory-gif">
+                        <a href="https://tenor.com/view/milk-and-mocha-milk-mocha-bear-milk-mocha-bears-happy-gif-4205597609781603657" target="_blank" rel="noopener noreferrer" title="Milk and Mocha">
+                            <img src="https://media1.tenor.com/m/Ol1Ivm9DrUkAAAAC/milk-and-mocha-milk-mocha-bear.gif" alt="Milk and Mocha Bears" class="memory-gif-img">
+                        </a>
+                    </div>
+                    <div class="letter-container">
+                        <p id="memory-letter"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="starfield.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,668 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    /* Scroll con "snap" para detenerse exactamente en cada sección */
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #05020a;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    /* Sin flex en body: cada sección centra su propio contenido */
+    min-height: 100vh;
+    min-height: 100dvh; /* altura real en móviles (barra del navegador) */
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-text-size-adjust: 100%;
+    position: relative;
+}
+
+/* Noche estrellada animada: nebulosa en movimiento + canvas de estrellas */
+.nebula {
+    position: fixed;
+    inset: -20%;
+    z-index: -2;
+    background:
+        radial-gradient(ellipse 40% 35% at 25% 30%, rgba(90, 40, 140, 0.35), transparent 70%),
+        radial-gradient(ellipse 35% 40% at 75% 65%, rgba(30, 60, 140, 0.30), transparent 70%),
+        radial-gradient(ellipse 30% 30% at 55% 15%, rgba(160, 60, 120, 0.18), transparent 70%);
+    animation: nebulaDrift 40s ease-in-out infinite alternate;
+    will-change: transform;
+    transform: translateZ(0);
+    pointer-events: none;
+}
+
+@keyframes nebulaDrift {
+    0%   { transform: translate3d(-3%, -2%, 0) rotate(0deg) scale(1); }
+    50%  { transform: translate3d(3%, 2%, 0) rotate(4deg) scale(1.08); }
+    100% { transform: translate3d(-2%, 3%, 0) rotate(-3deg) scale(1.03); }
+}
+
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+
+.container {
+    text-align: center;
+    z-index: 1;
+    padding: 20px 20px 100px; /* espacio inferior para el indicador de scroll */
+}
+
+.title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.4rem, 6vw, 2.5rem);
+    line-height: 1.3;
+    color: #ffd966; /* Dorado brillante */
+    text-shadow:
+        0 0 8px rgba(255, 217, 102, 0.9),
+        0 0 20px rgba(255, 200, 70, 0.7),
+        0 0 40px rgba(255, 180, 40, 0.5);
+    margin-bottom: 3rem;
+    letter-spacing: 2px;
+}
+
+.counter {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.time-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.time-box span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: clamp(56px, 14vw, 70px);
+    height: clamp(64px, 16vw, 80px);
+    border: 1px solid #ffd966;
+    border-radius: 8px;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 400;
+    color: #ffe9a3;
+    text-shadow: 0 0 10px rgba(255, 217, 102, 0.9);
+    background: rgba(20, 10, 30, 0.6);
+    box-shadow:
+        0 0 14px rgba(255, 217, 102, 0.55),
+        inset 0 0 12px rgba(255, 217, 102, 0.2);
+    margin-bottom: 8px;
+}
+
+.time-box p {
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: #ffe08a;
+    text-shadow: 0 0 6px rgba(255, 217, 102, 0.6);
+}
+
+
+
+/* ===== Estilos para el Scroll ===== */
+.scroll-container {
+    width: 100%;
+}
+
+.section {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scroll-snap-align: start; /* Detiene el scroll exactamente en la sección */
+    position: relative;
+    width: 100%;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.7;
+    animation: bounce 2s infinite;
+    pointer-events: none;
+}
+
+.scroll-indicator span {
+    font-size: 0.8rem;
+    color: #ffe08a;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 6px rgba(255, 217, 102, 0.6);
+    white-space: nowrap;
+}
+
+.arrow-down {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid #ffd966;
+    border-bottom: 2px solid #ffd966;
+    transform: rotate(45deg);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+    40% { transform: translateY(-15px) translateX(-50%); }
+    60% { transform: translateY(-7px) translateX(-50%); }
+}
+
+/* ===== Estilos del Corazón (Sección 2) ===== */
+.heart-section {
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.heart-section.visible {
+    opacity: 1;
+}
+
+.heart-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.heart-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    text-align: center;
+    padding: 0 16px;
+    color: #ff6b81;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(255, 107, 129, 0.5);
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 1s ease 0.5s; /* Aparece después del corazón */
+}
+
+.heart-section.visible .heart-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#heart-canvas {
+    position: relative;
+    /* El tamaño (width/height) y --heart-font se calculan en script.js (drawHeart) */
+    width: 400px;
+    height: 380px;
+    flex-shrink: 0;
+}
+
+.love-phrase {
+    position: absolute;
+    color: #ff4757;
+    font-family: monospace;
+    font-size: var(--heart-font, 14px);
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    text-shadow: 0 0 5px rgba(255, 71, 87, 0.8);
+    transition: opacity 0.5s ease, color 0.4s ease, text-shadow 0.4s ease, transform 0.2s ease;
+}
+
+.love-phrase.active {
+    opacity: 1;
+}
+
+.love-phrase.sparkling {
+    color: #fff4f6 !important;
+    text-shadow: 0 0 6px #fff, 0 0 14px #ff8fa3, 0 0 24px #ff4757 !important;
+}
+
+.love-phrase:hover {
+    color: #ff6b81;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    z-index: 20;
+    cursor: default;
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* El texto principal "Te amo" en el centro */
+.center-love,
+.love-phrase.active.center-love {
+    font-size: calc(var(--heart-font, 14px) * 1.8);
+    font-weight: bold;
+    color: #fff0f3;
+    z-index: 5;
+    text-shadow:
+        0 0 6px #fff,
+        0 0 14px rgba(255, 143, 163, 0.95),
+        0 0 28px rgba(255, 71, 87, 0.9);
+    animation: beat 1s infinite alternate;
+}
+
+@keyframes beat {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        text-shadow:
+            0 0 5px #fff,
+            0 0 12px rgba(255, 143, 163, 0.85),
+            0 0 24px rgba(255, 71, 87, 0.7);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.12);
+        text-shadow:
+            0 0 8px #fff,
+            0 0 20px rgba(255, 143, 163, 1),
+            0 0 42px rgba(255, 71, 87, 1),
+            0 0 70px rgba(255, 71, 87, 0.6);
+    }
+}
+
+/* Halo suave detrás del corazón, late al mismo ritmo que "Te amo" */
+#heart-canvas {
+    z-index: 0;
+}
+
+#heart-canvas::before {
+    content: '';
+    position: absolute;
+    inset: -8%;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 50% 48% at 50% 45%, rgba(255, 71, 87, 0.22), transparent 70%);
+    animation: halo 1s ease-in-out infinite alternate;
+}
+
+@keyframes halo {
+    0%   { opacity: 0.5; transform: scale(0.97); }
+    100% { opacity: 1;   transform: scale(1.04); }
+}
+
+/* ===== Estilos del \u00c1rbol (Secci\u00f3n 3) ===== */
+.tree-section {
+    /* Transici\u00f3n suave de fondo (semitransparente para que se sigan viendo las estrellas) */
+    background: linear-gradient(to bottom, rgba(5, 2, 10, 0) 0%, rgba(26, 11, 46, 0.75) 100%);
+    overflow: hidden;
+}
+
+.tree-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 5vh 0;
+}
+
+.tree-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    text-align: center;
+    color: #ffd966;
+    text-shadow: 0 0 10px rgba(255, 217, 102, 0.6);
+    margin-bottom: 8px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
+    z-index: 10;
+    padding: 0 15px;
+}
+
+.tree-section.visible .tree-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tree-wrapper {
+    position: relative;
+    /* Caja 4:5 igual que el viewBox del SVG, para que las hojas coincidan con las ramas */
+    width: min(92vw, 400px, calc(48vh * 0.8));
+    width: min(92vw, 400px, calc(48dvh * 0.8));
+    aspect-ratio: 4 / 5;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: opacity 1s ease 0.5s;
+}
+
+.tree-section.visible .tree-wrapper {
+    opacity: 1;
+}
+
+#tree-svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    overflow: visible;
+}
+
+/* Animaci\u00f3n de dibujo de los trazos (tronco y ramas) */
+.tree-path {
+    stroke: url(#barkGradient);
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Nubes de volumen de flores en el fondo de la copa */
+.cloud-puff {
+    fill: url(#blossomCloud);
+    opacity: 0;
+    transform-origin: center;
+    transform: scale(0.3);
+    transition: opacity 1.3s ease-out, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cloud-puff.bloomed {
+    opacity: 0.9;
+    transform: scale(1);
+}
+
+#leaves-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* No bloquear clicks */
+    transform-origin: 50% 80%;
+    animation: canopy-breeze 4.5s ease-in-out infinite alternate;
+    will-change: transform;
+}
+
+@keyframes canopy-breeze {
+    0%   { transform: rotate(-1.5deg) translate3d(-1px, 0, 0); }
+    100% { transform: rotate(1.5deg) translate3d(1px, 0, 0); }
+}
+
+.leaf {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border-radius: 65% 0 65% 65%;
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+    transition: opacity 0.5s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 1px 4px rgba(255, 117, 140, 0.25);
+}
+
+.leaf.grown {
+    opacity: 0.94;
+    transform: scale(var(--s, 1)) rotate(var(--r, 0deg));
+}
+
+/* Colores variados de flor de cerezo */
+.leaf.color1 { background: linear-gradient(135deg, #ff9ebb, #ff758c); }
+.leaf.color2 { background: linear-gradient(135deg, #ffd6e0, #ff9a9e); }
+.leaf.color3 { background: linear-gradient(135deg, #ffc2d1, #fecfef); }
+.leaf.color4 { background: linear-gradient(135deg, #fff0f5, #ffb7c5); }
+.leaf.color5 { background: linear-gradient(135deg, #ffe5ec, #ff6b81); }
+
+/* Destellos dorados entre las flores */
+.leaf.leaf-gold {
+    background: radial-gradient(circle, #fff3c4 20%, #ffd700 70%, #ffaa00 100%);
+    border-radius: 50%;
+    width: 7px;
+    height: 7px;
+    margin: -3.5px 0 0 -3.5px;
+    box-shadow: 0 0 6px rgba(255, 215, 0, 0.8);
+    animation: gold-twinkle 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes gold-twinkle {
+    0% { transform: scale(var(--s, 1)) scale(0.8); opacity: 0.7; }
+    100% { transform: scale(var(--s, 1)) scale(1.3); opacity: 1; }
+}
+
+/* Pétalos cayendo con la brisa */
+#falling-petals-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.falling-petal {
+    position: absolute;
+    width: 8px;
+    height: 9px;
+    background: linear-gradient(135deg, #ffc2d1, #ff8da1);
+    border-radius: 65% 0 65% 65%;
+    opacity: 0;
+    animation: petal-drift var(--drift-dur, 5.5s) ease-in-out infinite;
+    animation-delay: var(--drift-delay, 0s);
+}
+
+@keyframes petal-drift {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    15% {
+        opacity: 0.85;
+    }
+    85% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(var(--drift-x, 25px), 250px, 0) rotate(var(--drift-r, 360deg));
+    }
+}
+
+/* ===== Estilos para la Carta y GIF (Futuros) ===== */
+.memory-content {
+    width: 90%;
+    max-width: 600px;
+    background: rgba(20, 10, 30, 0.7);
+    border: 1px solid rgba(255, 217, 102, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 8px;
+    opacity: 0; /* Oculto hasta que crezca el \u00e1rbol */
+    transform: translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 20;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+.memory-content.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.gif-placeholder {
+    width: 165px;
+    height: 128px;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 1.5px solid rgba(255, 183, 178, 0.4);
+    box-shadow: 0 4px 18px rgba(255, 107, 129, 0.3), 0 0 10px rgba(255, 183, 178, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gif-placeholder:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 24px rgba(255, 107, 129, 0.45), 0 0 16px rgba(255, 183, 178, 0.35);
+}
+
+.gif-placeholder a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.memory-gif-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+}
+
+.placeholder-icon {
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+}
+
+.letter-container p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #e0e0e0;
+    text-align: center;
+    min-height: 80px; /* Espacio m\u00ednimo mientras se escribe */
+}
+
+/* En pantallas anchas la tarjeta va en horizontal para no alargar la secci\u00f3n */
+@media (min-width: 700px) {
+    .memory-content {
+        flex-direction: row;
+        max-width: 720px;
+    }
+    .letter-container p {
+        text-align: left;
+    }
+}
+
+/* Indicador espec\u00edfico para la secci\u00f3n del coraz\u00f3n */
+.tree-indicator {
+    bottom: 20px;
+    animation-delay: 0.5s;
+}
+.tree-indicator span {
+    color: #ffb7b2;
+    text-shadow: 0 0 5px rgba(255, 183, 178, 0.5);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+    .container {
+        padding: 24px 16px 100px;
+        width: 100%;
+    }
+
+    .title {
+        margin-bottom: 2rem;
+        letter-spacing: 1px;
+    }
+
+    /* 6 cajas -> cuadrícula de 3 x 2 */
+    .counter {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px 10px;
+        justify-items: center;
+        max-width: 340px;
+        margin: 0 auto 2rem;
+    }
+
+    .time-box span {
+        width: min(88px, 26vw);
+        height: min(88px, 26vw);
+    }
+
+
+
+    /* Ajustes para el árbol y la carta en móvil */
+    .tree-container {
+        padding: 18px 12px 30px;
+        gap: 8px;
+    }
+
+    .tree-title {
+        font-size: 1.15rem;
+        margin-bottom: 4px;
+    }
+
+    .tree-wrapper {
+        width: min(76vw, 240px);
+    }
+
+    .memory-content {
+        padding: 14px 16px;
+        gap: 10px;
+        margin-top: 4px;
+    }
+
+    .gif-placeholder {
+        width: 130px;
+        height: 100px;
+        margin: 0 auto;
+    }
+
+    .placeholder-icon {
+        font-size: 1.6rem;
+    }
+
+    .letter-container p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        min-height: 60px;
+    }
+}
+
+/* Pantallas bajas (móvil en horizontal) */
+@media (max-height: 500px) {
+    body {
+        align-items: flex-start;
+    }
+
+    .title {
+        margin-bottom: 1.2rem;
+    }
+
+    .counter {
+        margin-bottom: 1.2rem;
+    }
+}
+
+/* Teléfonos muy pequeños */
+@media (max-width: 360px) {
+    .counter {
+        gap: 10px 6px;
+    }
+
+    .time-box p {
+        font-size: 0.65rem;
+    }
+}
